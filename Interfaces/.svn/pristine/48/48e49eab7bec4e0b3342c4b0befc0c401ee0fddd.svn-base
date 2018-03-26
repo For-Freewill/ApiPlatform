@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite verbose="0" name="Failed suite [My test suite]">
+  <listeners>
+    <listener class-name="cn.springmvc.apitest.ApiTestReport"/>
+  </listeners>
+  <test name="单元测试(failed)">
+    <classes>
+      <class name="cn.springmvc.apitest.ApiTest">
+        <methods>
+          <include name="springTestContextBeforeTestClass"/>
+          <include name="springTestContextPrepareTestInstance"/>
+          <include name="springTestContextAfterTestClass"/>
+          <include name="springTestContextBeforeTestMethod"/>
+          <include name="parameterIntTest" invocation-numbers="1"/>
+          <include name="springTestContextAfterTestMethod"/>
+        </methods>
+      </class> <!-- cn.springmvc.apitest.ApiTest -->
+    </classes>
+  </test> <!-- 单元测试(failed) -->
+</suite> <!-- Failed suite [My test suite] -->

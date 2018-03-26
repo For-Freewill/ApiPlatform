@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="My test suite">
+  <test name="单元测试">
+    <classes>
+       <class name="cn.springmvc.apitest.ApiTest" />
+   </classes>
+  </test>
+  <listeners>
+        <listener class-name="cn.springmvc.apitest.ApiTestReport"/>
+    </listeners>
+</suite>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="3" passed="3">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="6226" started-at="2018-03-15T08:32:57Z" finished-at="2018-03-15T08:33:03Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="6226" started-at="2018-03-15T08:32:57Z" finished-at="2018-03-15T08:33:03Z">
+      <class name="cn.springmvc.test.MvcMockTest">
+        <test-method status="PASS" signature="springTestContextBeforeTestClass()[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextBeforeTestClass" is-config="true" duration-ms="19" started-at="2018-03-15T16:32:57Z" finished-at="2018-03-15T16:32:57Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextBeforeTestClass -->
+        <test-method status="PASS" signature="springTestContextPrepareTestInstance()[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextPrepareTestInstance" is-config="true" duration-ms="5246" started-at="2018-03-15T16:32:57Z" depends-on-methods="org.springframework.test.context.testng.AbstractTestNGSpringContextTests.springTestContextBeforeTestClass" finished-at="2018-03-15T16:33:02Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextPrepareTestInstance -->
+        <test-method status="PASS" signature="setup()[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="setup" is-config="true" duration-ms="153" started-at="2018-03-15T16:33:02Z" finished-at="2018-03-15T16:33:02Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method status="PASS" signature="springTestContextBeforeTestMethod(java.lang.reflect.Method)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextBeforeTestMethod" is-config="true" duration-ms="7" started-at="2018-03-15T16:33:02Z" finished-at="2018-03-15T16:33:02Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void cn.springmvc.test.MvcMockTest.jsonTest(int) throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextBeforeTestMethod -->
+        <test-method status="PASS" signature="jsonTest(int)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="jsonTest" duration-ms="714" started-at="2018-03-15T16:33:02Z" data-provider="mytest" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[1]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- jsonTest -->
+        <test-method status="PASS" signature="springTestContextAfterTestMethod(java.lang.reflect.Method)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextAfterTestMethod" is-config="true" duration-ms="0" started-at="2018-03-15T16:33:03Z" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void cn.springmvc.test.MvcMockTest.jsonTest(int) throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextAfterTestMethod -->
+        <test-method status="PASS" signature="springTestContextBeforeTestMethod(java.lang.reflect.Method)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextBeforeTestMethod" is-config="true" duration-ms="1" started-at="2018-03-15T16:33:03Z" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void cn.springmvc.test.MvcMockTest.jsonTest(int) throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextBeforeTestMethod -->
+        <test-method status="PASS" signature="jsonTest(int)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="jsonTest" duration-ms="26" started-at="2018-03-15T16:33:03Z" data-provider="mytest" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[2]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- jsonTest -->
+        <test-method status="PASS" signature="springTestContextBeforeTestMethod(java.lang.reflect.Method)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextBeforeTestMethod" is-config="true" duration-ms="1" started-at="2018-03-15T16:33:03Z" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void cn.springmvc.test.MvcMockTest.jsonTest(int) throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextBeforeTestMethod -->
+        <test-method status="PASS" signature="springTestContextAfterTestMethod(java.lang.reflect.Method)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextAfterTestMethod" is-config="true" duration-ms="0" started-at="2018-03-15T16:33:03Z" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void cn.springmvc.test.MvcMockTest.jsonTest(int) throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextAfterTestMethod -->
+        <test-method status="PASS" signature="jsonTest(int)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="jsonTest" duration-ms="28" started-at="2018-03-15T16:33:03Z" data-provider="mytest" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[3]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- jsonTest -->
+        <test-method status="PASS" signature="springTestContextAfterTestMethod(java.lang.reflect.Method)[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextAfterTestMethod" is-config="true" duration-ms="1" started-at="2018-03-15T16:33:03Z" finished-at="2018-03-15T16:33:03Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void cn.springmvc.test.MvcMockTest.jsonTest(int) throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextAfterTestMethod -->
+        <test-method status="PASS" signature="springTestContextAfterTestClass()[pri:0, instance:cn.springmvc.test.MvcMockTest@32a068d1]" name="springTestContextAfterTestClass" is-config="true" duration-ms="0" started-at="2018-03-15T16:33:03Z" finished-at="2018-03-15T16:33:03Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- springTestContextAfterTestClass -->
+      </class> <!-- cn.springmvc.test.MvcMockTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

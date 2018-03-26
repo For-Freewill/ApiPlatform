@@ -1,0 +1,15 @@
+jdbc.driverClass=com.mysql.jdbc.Driver
+jdbc.url=jdbc\:mysql\://123.58.251.183\:3306/Interfaces?characterEncoding=utf-8
+jdbc.username=root
+jdbc.password=123123
+jdbc.initPoolSize=5
+jdbc.maxPoolSize=10
+
+mail.host=smtp.163.com
+mail.username=testfan_test2@163.com
+mail.password=123456test
+mail.title=error
+mail.touser=279313259@qq.com,testfan_test2@163.com
+
+
+

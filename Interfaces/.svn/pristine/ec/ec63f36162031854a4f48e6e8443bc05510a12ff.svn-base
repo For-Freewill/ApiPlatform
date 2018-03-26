@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!-- 配置c3p0连接池 -->
+<!-- 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"> -->
+<!-- 		<property name="driverClass" value="${jdbc.driverClass}" /> -->
+<!-- 		<property name="jdbcUrl" value="${jdbc.url}" /> -->
+<!-- 		<property name="user" value="${jdbc.username}" /> -->
+<!-- 		<property name="password" value="${jdbc.password}" /> -->
+<!-- 		<property name="initialPoolSize" value="${jdbc.initPoolSize}"></property> -->
+<!--         <property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property> -->
+<!-- 	</bean>  -->
+	
+	 <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">   
+        <property name="driverClassName" value="${jdbc.driverClass}" />  
+        <property name="url" value="${jdbc.url}" />  
+        <property name="username" value="${jdbc.username}" />  
+        <property name="password" value="${jdbc.password}" />  
+           
+        <property name="filters" value="stat" />  
+       
+        <property name="maxActive" value="${jdbc.maxPoolSize}" />  
+        <property name="initialSize" value="${jdbc.initPoolSize}" />  
+        <property name="maxWait" value="60000" />  
+        <property name="minIdle" value="1" />  
+       
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />  
+        <property name="minEvictableIdleTimeMillis" value="300000" />  
+       
+        <property name="validationQuery" value="SELECT 'x'" />  
+        <property name="testWhileIdle" value="true" />  
+        <property name="testOnBorrow" value="false" />  
+        <property name="testOnReturn" value="false" />
+           
+        <property name="poolPreparedStatements" value="true" />  
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="50" />  
+    </bean> 
+  
+    
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 可通过注解控制事务 -->
+	<tx:annotation-driven />
+     
+    <!-- mybatis文件配置，扫描所有mapper文件 -->      
+       <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:conf/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath:mapper/*.xml" />
+	</bean>
+       
+   <!-- spring与mybatis整合配置，扫描所有dao -->
+	 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.springmvc.dao" />
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
+        <property name="dataSource" ref="dataSource"></property>  
+    </bean>  
+  
+ 	
+
+</beans>

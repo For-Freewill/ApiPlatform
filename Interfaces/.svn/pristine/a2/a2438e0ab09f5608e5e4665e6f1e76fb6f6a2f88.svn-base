@@ -1,0 +1,43 @@
+package generator;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mybatis.generator.api.MyBatisGenerator;
+import org.mybatis.generator.config.Configuration;
+import org.mybatis.generator.config.xml.ConfigurationParser;
+import org.mybatis.generator.exception.InvalidConfigurationException;
+import org.mybatis.generator.exception.XMLParserException;
+import org.mybatis.generator.internal.DefaultShellCallback;
+
+public class MyGenerator {
+
+	public static void main(String[] args)
+			throws IOException, XMLParserException, InvalidConfigurationException, SQLException, InterruptedException {
+		boolean overwrite = true;
+		File directory = new File(".");
+		// 项目中/src/main
+		String mainPath = directory.getCanonicalPath() + File.separator + "src" + File.separator;
+		// 项目中/src/main/resources/generatorConfig.xml
+		String generatorConfigPath = mainPath + "main" + File.separator + "resources" + File.separator
+				+ "generatorConfig.xml";
+		System.out.println("generatorConfig.xml=" + generatorConfigPath + " mainPath " + mainPath);
+		File configFile = new File(generatorConfigPath);
+
+		List<String> warnings = new ArrayList<String>();
+		ConfigurationParser cp = new ConfigurationParser(warnings);
+		Configuration config = cp.parseConfiguration(configFile);
+		String mysqlConnector = mainPath + "main" + File.separator + "webapp" + File.separator + "WEB-INF"
+				+ File.separator + "lib" + File.separator + "mysql-connector-java-5.1.39-bin.jar";
+		System.out.println("mysql.jar path =" + mysqlConnector);
+		config.addClasspathEntry(mysqlConnector);
+
+		DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+		MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+		myBatisGenerator.generate(null);
+		System.out.println("success");
+	}
+}

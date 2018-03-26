@@ -1,0 +1,199 @@
+package cn.springmvc.test;
+
+
+import cn.springmvc.controller.DeptController;
+import cn.springmvc.controller.UserController;
+import cn.springmvc.model.Dept;
+import cn.springmvc.model.TestCase;
+import cn.springmvc.model.TestCaseCriteria;
+import cn.springmvc.model.User;
+import cn.springmvc.service.IDeptService;
+import cn.springmvc.service.IUserService;
+
+import org.junit.runner.RunWith;  
+import org.mockito.InjectMocks;  
+import org.mockito.Mock;  
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;  
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.web.WebAppConfiguration;  
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;  
+import static org.mockito.Mockito.verify;  
+import static org.mockito.Mockito.when;  
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;  
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;  
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.hamcrest.core.IsSame;
+import org.springframework.beans.factory.annotation.Autowired;  
+import org.springframework.test.web.servlet.MockMvc;  
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;  
+import org.springframework.web.context.WebApplicationContext;  
+  
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;  
+  
+import org.junit.runner.RunWith;  
+import org.springframework.test.context.ContextConfiguration;  
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;  
+import org.springframework.test.context.web.WebAppConfiguration;
+//import static org.hamcrest.Matchers.hasSize;
+  
+
+@ContextConfiguration(locations = { "classpath:/conf/spring.xml","classpath:/conf/spring-mvc.xml","classpath:/conf/spring-mybatis.xml"})
+@WebAppConfiguration  
+public class ControllerMockWithTestNg extends AbstractTestNGSpringContextTests{  
+    private MockMvc mockMvc;  
+    @Autowired  
+    private WebApplicationContext wac;
+  
+    @Mock  
+    private IUserService userService;  
+  
+    @InjectMocks  
+    private UserController userController; 
+    
+    @Mock
+	private HttpServletRequest request;
+  
+    @BeforeClass  
+    public void setup() {  
+    	 MockitoAnnotations.initMocks(this);  
+    	 //this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    	  this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();  
+    } 
+    
+//    @Test  
+//    public void formTest() throws Exception {  
+//    	ResultActions actions = mockMvc.perform(get("/user/toedituser.do").param("userid", "123"));
+//        mockMvc.perform(get("/user/toedituser.do").param("userid", "123"))  
+//                .andExpect(status().isOk())
+//                .andDo(print())
+//                .andExpect(view().name("user/edituser"));
+//    }  
+    
+//    @Test  
+//    public void jsonTest() throws Exception {  
+//             mockMvc.perform(post("/report/result.do").param("pageSize", "10")
+//            		            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+//            		            .accept(MediaType.parseMediaType("application/json;charset=UTF-8"))
+//            		            )  
+//                 .andExpect(status().isOk())
+//                 .andDo(print())
+//                 .andExpect(jsonPath("$", hasSize(10)))
+//                 .andExpect(jsonPath("$[0].runtime").value("1507973164000"))
+//               ;
+//    } 
+//    
+    
+//    @Test(dataProvider = "mytest")
+//    public void jsonTest(int pageSize) throws Exception {  
+//             mockMvc.perform(post("/report/result.do").param("pageSize", ""+pageSize)
+//            		            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+//            		            .accept(MediaType.parseMediaType("application/json;charset=UTF-8"))
+//            		            )  
+//                 .andExpect(status().isOk())
+//                 .andDo(print())
+//                 .andExpect(jsonPath("$", hasSize(pageSize)))
+//                 //.andExpect(jsonPath("$[0].runtime").value("1507973164000"))
+//               ;
+//    } 
+    
+//    @DataProvider(name = "mytest")
+//    public Iterator<Object[]> parameterIntTestProvider() {
+//    	List<Object[]> dataProvider = new ArrayList<Object[]>();
+////    	TestCaseCriteria c = new TestCaseCriteria();
+////    	c.createCriteria().andRunEqualTo("Y");
+// //   	 List<TestCase> list = testCaseMapper.selectByExampleWithBLOBs(c);
+////    	for (TestCase TestCase : list) {
+////    	    dataProvider.add(new Object[] { TestCase });
+////		}
+//    	dataProvider.add(new Object[] { 1 });
+//    	dataProvider.add(new Object[] { 2 });
+//    	dataProvider.add(new Object[] { 3 });
+//        return dataProvider.iterator();
+//    }
+
+  
+
+
+ 
+    
+    
+    
+//    @Test
+//    public void testAdd() throws Exception{
+//    	User user = new User();  
+//        user.setName("111");  
+//        user.setPassword("11111");  
+//        when(userService.adduser(user)).thenReturn(1);  
+//  
+//        int restUser = userController.addUserInfo(user);  
+//        assertEquals(1, restUser);  
+//  
+//        verify(userService).adduser(user);  
+//  }
+    
+//    @Test
+//    public void testAdd2() throws Exception{
+//    	String pass = "1234";
+//     
+//      
+//  	User user = new User();  
+//    user.setPassword(pass);  
+//    when(userService.adduser(user)).thenReturn(1);  
+//    
+//    ResultActions actions= mockMvc.perform(post("/user/addUser.do").param("password", "123"))  
+//    //.andExpect(status().isOk())
+//    .andDo(print())
+//    //.andExpect(view().name("user/edituser"))
+//    ;
+//    verify(userService).adduser(user); 
+//   // actions.andExpect(matcher)
+//  }
+    
+//  @Test
+//  public void testAdd3() throws Exception{
+//  	String pass = "1234";
+//  	String userName ="tst123";
+//  	String id= ""+System.currentTimeMillis();
+//   
+//    
+//  User user = new User();  
+//  user.setPassword(pass);
+//  user.setUsername(userName);
+//  user.setUserid(id);
+//  when(userService.getUser(userName)).thenReturn(user);  
+//  
+//  ResultActions actions= mockMvc.perform(post("/user/addUser.do").param("userid",id).param("password", "123").param("username", userName))  
+//  //.andExpect(status().isOk())
+//  .andDo(print())
+//  //.andExpect(view().name("user/edituser"))
+//  ;
+//  verify(userService).adduser(user); 
+// // actions.andExpect(matcher)
+//}
+
+  
+}  

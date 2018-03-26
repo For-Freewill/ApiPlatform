@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<properties resource="conf\jdbc.properties" />
+	  <!-- 指定数据连接驱动jar地址 -->  
+    <classPathEntry location="${driverPath}" /> 
+	<!-- 此处指定生成针对MyBatis3的DAO -->
+	<context id="context" targetRuntime="MyBatis3">
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Criteria" />
+		</plugin>
+		<!-- 去掉生成出来的代码的注解 -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+
+		<!-- jdbc连接信息 -->
+		<jdbcConnection driverClass="${jdbc.driverClass}"
+			connectionURL="${jdbc.url}" userId="${jdbc.username}" password="${jdbc.password}">
+		</jdbcConnection>
+
+		<!-- 默认false，表示把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer; true表示把JDBC DECIMAL 
+			和 NUMERIC 类型解析为java.math.BigDecimal -->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- 生成bean对象 -->
+		<javaModelGenerator targetPackage="${target_package}.model"
+			targetProject="src\main\java">
+			<!-- enableSubPackages:是否让schema作为包的后缀 -->
+			<property name="enableSubPackages" value="true" />
+			<!-- 从数据库返回的值被清理前后的空格 -->
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<!-- 生成sqlMap xml -->
+		<sqlMapGenerator targetPackage="${target_package}.mapping"
+			targetProject="src\main\java">
+			<property name="enableSubPackages" value="true" />
+			</sqlMapGenerator>
+	
+		<!-- 生成DAO的类文件 -->
+		<javaClientGenerator targetPackage="${target_package}.dao"
+			targetProject="src\main\java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		
+	
+		<table tableName="t_dept" domainObjectName="Dept"></table>
+		
+	</context>
+</generatorConfiguration>

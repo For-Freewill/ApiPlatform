@@ -1,0 +1,243 @@
+package cn.springmvc.apitest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.googlecode.aviator.AviatorEvaluator;
+import com.jayway.jsonpath.JsonPath;
+
+import cn.springmvc.dao.TestCaseMapper;
+import cn.springmvc.model.TestCase;
+import cn.springmvc.model.TestCaseCriteria;
+
+
+@ContextConfiguration(locations = { "classpath:/conf/spring.xml", "classpath:/conf/spring-mybatis.xml"})
+public class ApiTest extends AbstractTestNGSpringContextTests{
+	
+	private static Map<String,Object> saveMap =new HashMap<String,Object>();
+	
+	protected Pattern replaceParamPattern = Pattern.compile("\\$\\{(.*?)\\}");
+	
+	@Autowired
+	private TestCaseMapper testCaseMapper;
+
+	
+	@Test(dataProvider = "testdb")
+    public void parameterIntTest(TestCase  bean) {
+       System.out.println("Parameterized Number is : " + bean);
+       
+       CloseableHttpClient httpclient = HttpClients.createDefault();
+		 
+		 try {
+			 preParams(bean);
+			//preParams(bean.getParam());
+			HttpRequestBase http = getHttp(bean);;  
+			CloseableHttpResponse response= httpclient.execute(http);
+			
+			HttpEntity entity = response.getEntity();
+			
+			int code = response.getStatusLine().getStatusCode();
+			System.out.println(" code "+code);
+			String result ="";
+			if(entity!=null){
+				result= EntityUtils.toString(entity);
+			}
+          System.out.println(result);
+          check(result,bean.getCheckpoint());
+          saveMap(result,bean.getCorrelation());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			
+		     try {
+				httpclient.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		 
+    
+    }
+	
+//	private void check(String result,String params){
+//		if (params != null && !"".equals(params)&&!"null".equals(params)) {
+//			System.out.println(params.trim());
+//			String p = params.trim();
+//			System.out.println(result.contains(p));
+//			Assert.assertTrue(result.contains(p));
+//			System.out.println();
+//		}
+//	}
+	
+	private void check(String result,String params){
+		if (params != null && !"".equals(params)&&!"null".equals(params)) {
+			if (params != null && !"".equals(params)&&!"null".equals(params)) {
+				String[] ps = params.split(";");
+				for (String p : ps) {
+					String[] values = p.split("=|<|>|==");
+					System.out.println("check-------"+values[0]+ " "+values[1] );
+					 String regx= p.replace(values[0], "data");
+					// regx= regx.replace("=", "==");
+					 System.out.println(" regx----"+ regx);
+					 Map<String, Object> env = new HashMap<String, Object>();
+					 
+					Object vaule= JsonPath.read(result, values[0]);
+					if(vaule instanceof String){
+						vaule = Integer.parseInt(vaule.toString());
+					}
+				     env.put("data", vaule);
+				     System.out.println("regx "+ regx + " data "+ values[0]);
+					 Boolean b = (Boolean) AviatorEvaluator.execute(regx,env);
+					// System.out.println("check reuslt --"+ b);
+					 Assert.assertTrue(b);
+				}
+			}
+		}
+	}
+	
+	private void saveMap(String result,String save){
+		Map<String,Object> map = getParamMp(save);
+		if(map!=null){
+		for (Entry<String, Object> entry : map.entrySet()) {
+			System.out.println(entry.getKey() + " ---  "+entry.getValue().toString());
+			String key = entry.getKey();
+			if(key.endsWith("*")){
+				String before= key.split("_")[0];
+				List<String> list=  JsonPath.read(result, entry.getValue().toString());
+				for(int i=0;i<list.size();i++){
+					System.out.println("-----------"+before+"_"+(i+1) + "-------:----------"+ list.get(i));
+					saveMap.put(before+"_"+(i+1),list.get(i));
+				}
+			}else{
+				saveMap.put(entry.getKey(), JsonPath.read(result, entry.getValue().toString()));
+			}
+		  }
+		}
+	}
+	
+	private void preParams(TestCase bean){
+		 Matcher matcher = replaceParamPattern.matcher(bean.getUrl());
+	        while (matcher.find()) {
+	        	System.out.println(matcher.group());
+	        	System.out.println("----------");
+	        	System.out.println(matcher.group(1));
+	        	
+	        	String value = saveMap.get(matcher.group(1)).toString();
+	        	System.out.println("---"+value);
+	        	String newUrl = bean.getUrl().replace(matcher.group(), value);
+	        	System.out.println(newUrl);
+	        	bean.setUrl(newUrl);
+	        }
+	        
+	      if(bean.getParam()!=null&&!"null".equals(bean.getParam())&&!"".equals(bean.getParam())){
+	        Matcher matcherbody = replaceParamPattern.matcher(bean.getParam());
+	        while (matcherbody.find()) {
+	        	System.out.println(matcherbody.group());
+	        	System.out.println("----------");
+	        	System.out.println(matcherbody.group(1));
+	        	
+	        	String value = saveMap.get(matcherbody.group(1)).toString();
+	        	System.out.println("---"+value);
+	        	String newBody = bean.getParam().replace(matcherbody.group(), value);
+	        	System.out.println(newBody);
+	        	bean.setParam(newBody);
+	        }
+	        }
+	}
+	
+	
+	public HttpRequestBase getHttp(TestCase bean) {
+		HttpRequestBase http = null;
+		if ("form".equalsIgnoreCase(bean.getType())) {
+			if ("get".equalsIgnoreCase(bean.getMethod())) {
+				http = new HttpGet(bean.getUrl());
+			} else {
+				http = new HttpPost(bean.getUrl());
+				Map<String, Object> para_mp = getParamMp(bean.getParam());
+				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+				if (para_mp != null) {
+					for (Entry<String, Object> entry : para_mp.entrySet()) {
+						nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));
+					}
+				}
+
+				UrlEncodedFormEntity urlentity = new UrlEncodedFormEntity(nvps, Consts.UTF_8);
+				((HttpPost) http).setEntity(urlentity);
+			}
+		} else if ("json".equalsIgnoreCase(bean.getType())) {
+			    http = new HttpPost(bean.getUrl());
+			    StringEntity entity = new StringEntity(bean.getParam(),"utf-8");  
+		        entity.setContentEncoding("UTF-8");    
+		        entity.setContentType("application/json"); 
+		        ((HttpPost) http).setEntity(entity);
+		}
+		
+        //header 
+		Map<String,Object> map = getParamMp(bean.getHeader());
+		if (map != null) {
+			for (Entry<String, Object> entry : map.entrySet()) {
+				http.setHeader(entry.getKey(), entry.getValue().toString());
+			}
+		}
+		return http;
+	}
+	
+	
+	private Map<String,Object> getParamMp(String params){
+		Map<String, Object> para_mp = null;
+		if (params != null && !"".equals(params)&&!"null".equals(params)) {
+			para_mp = new HashMap<String, Object>();
+			String[] ps = params.split(";");
+			for (String p : ps) {
+				String[] values = p.split("=");
+				para_mp.put(values[0], values[1]);
+			}
+		}
+		return para_mp;
+	}
+	
+    @DataProvider(name = "testdb")
+    public Iterator<Object[]> parameterIntTestProvider() {
+    	List<Object[]> dataProvider = new ArrayList<Object[]>();
+    	TestCaseCriteria c = new TestCaseCriteria();
+    	c.createCriteria().andRunEqualTo("Y");
+    	 List<TestCase> list = testCaseMapper.selectByExampleWithBLOBs(c);
+    	for (TestCase TestCase : list) {
+    	    dataProvider.add(new Object[] { TestCase });
+		}
+
+        return dataProvider.iterator();
+
+
+    }
+
+}

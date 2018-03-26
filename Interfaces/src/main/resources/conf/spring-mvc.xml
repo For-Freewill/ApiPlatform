@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+     
+    <!-- 扫描controller（controller层注入） -->
+   <context:component-scan base-package="cn.springmvc.controller"/>
+    
+   <bean id="messageAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
+       <property name="messageConverters">  
+           <list>  
+               <!-- Support JSON -->   
+               <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>  
+           </list>  
+       </property>  
+   </bean>  
+    <bean id="exceptionMessageAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver">  
+       <property name="messageConverters">  
+           <list>  
+               <!-- Support JSON -->   
+               <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>  
+           </list>  
+       </property>  
+   </bean> 
+
+   <!-- 定义Spring MVC 的模板文件 -->  
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+       <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>     <!-- 支持JSTL -->  
+       <property name="prefix" value="/" />              <!-- 模板的路径 -->  
+       <property name="suffix" value=".jsp" />                <!-- 模板文件的后缀-->  
+    </bean> 
+
+</beans>
+
+
+
+<!-- mvc配置文件 -->

@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------
+Test set: TestSuite
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 8.843 s <<< FAILURE! - in TestSuite
+parameterIntTest(cn.springmvc.apitest.ApiTest)  Time elapsed: 0.034 s  <<< FAILURE!
+com.googlecode.aviator.exception.ExpressionSyntaxErrorException: Syntax error:Aviator doesn't support assignment at 6, current token: [type='Number',lexeme='2',index=5]
+	at cn.springmvc.apitest.ApiTest.check(ApiTest.java:119)
+	at cn.springmvc.apitest.ApiTest.parameterIntTest(ApiTest.java:73)
+

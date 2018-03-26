@@ -1,0 +1,84 @@
+package cn.springmvc.utils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class ExcelUtils {
+	
+	public static List<Object[]> read(String filePath,String fileName,String sheetName) throws Exception{
+		
+		
+		Workbook workbook = null;
+
+        File file = new File(filePath + "/" + fileName);
+        FileInputStream fis = new FileInputStream(file);
+
+        String type = fileName.substring(fileName.indexOf("."));
+
+        // Excel2007 以后的格式为.xlsx的Excel文件，需要调用XSSFWorkbook
+        // Excel2007以前版本的格式为.xls的Excel文件，需要调用HSSFWorkbook
+
+        if (type.equals(".xlsx")) {
+
+            workbook = new XSSFWorkbook(fis);
+
+        } else if (type.equals(".xls")) {
+
+            workbook = new HSSFWorkbook(fis);
+        }
+
+        Sheet sheet = workbook.getSheet(sheetName);
+
+        List<Object[]> list = new ArrayList<Object[]>();
+
+        // 获取每行的行对象,第一行为信息栏，不计入，所以从1开始
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            // 获得一行中最后单元格的count
+            int lastCellCount = row.getLastCellNum();
+
+            // 定义一个数组来存放cell中值，根据cell的长度来定义数组的长度
+            String[] fileds = new String[lastCellCount];
+
+            for (int j = 0; j < lastCellCount; j++) {
+                String cellValue = row.getCell(j).getStringCellValue();
+                fileds[j] = cellValue;
+            }
+            list.add(fileds);
+        }
+        
+        fis.close();
+        return list;
+	}
+	
+	public static void main(String[] args) {
+		String path = System.getProperty("user.dir")+File.separator;
+		try {
+			List<Object[]> list = ExcelUtils.read(path, "data/testData.xls", "testcase");
+			for (Object[] objects : list) {
+				for (Object object : objects) {
+					System.out.print(object);
+				}
+				System.out.println();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

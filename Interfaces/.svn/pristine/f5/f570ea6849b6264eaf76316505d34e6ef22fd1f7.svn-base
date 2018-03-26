@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                           http://www.springframework.org/schema/task  
+                           http://www.springframework.org/schema/task/spring-task-4.0.xsd  ">
+
+
+	<!-- 引入jdbc配置文件 -->
+	<context:property-placeholder location="classpath:conf/jdbc.properties" />
+
+	<!-- 扫描文件（自动将servicec层注入） -->
+	<context:component-scan base-package="cn.springmvc.service" />
+
+	<context:component-scan base-package="cn.springmvc.apitest" />
+	
+	<bean class="cn.springmvc.apitest.SpringContextUtils" lazy-init="false" />
+
+	<bean class="cn.springmvc.mail.MailSender" />
+
+	<task:annotation-driven />
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}"></property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.timeout">25000</prop>
+			</props>
+		</property>
+		<property name="username" value="${mail.username}"></property>
+		<property name="password" value="${mail.password}"></property>
+	</bean>
+	
+	<bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="${mail.username}" />
+        <property name="subject" value="${mail.title}" />
+        <property name="to" value="${mail.touser}" />
+    </bean>
+	
+	<!--FreeMarker模板-->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="classpath:freemaker/" />
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="locale">zh_CN</prop>
+                <prop key="default_encoding">UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+    
+    
+    <!-- druid spring monitor setting -->
+<bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor" />
+<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
+<property name="patterns">
+<list>
+<value>cn.springmvc.service.*</value>
+</list>
+</property>
+</bean>
+<aop:config proxy-target-class="true">
+<aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />
+</aop:config>
+</beans>
+
+
+
+<!-- 此文件为spring配置文件的扫描 -->
